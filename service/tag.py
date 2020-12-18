@@ -27,8 +27,18 @@ class Tag:
         assert r.json()['errcode'] == 0
         return token
 
-    def add(self):
-        pass
+    def add(self,tag_name,group_name=None,group_id=None):
+        r=requests.post(
+            "https://qyapi.weixin.qq.com/cgi-bin/externalcontact/add_corp_tag",
+            params={"access_token": self.token},
+            json={
+                "group_id":group_id,
+                "group_name":group_name,
+                "tag":[{
+                    "name": tag_name
+                }]
+            })
+        return r
 
     def list(self):
         r = requests.post(
@@ -36,7 +46,6 @@ class Tag:
             params={"access_token": self.token},
             json={"tag_id": []}
         )
-
         return r
 
     def update(self,id,tag_name):
@@ -51,5 +60,12 @@ class Tag:
         )
         return r
 
-    def delete(self):
-        pass
+    def delete_tag(self,tag_id):
+        r = requests.post(
+            "https://qyapi.weixin.qq.com/cgi-bin/externalcontact/del_corp_tag",
+            params={"access_token": self.token},
+            json={
+                "tag_id": tag_id
+            }
+        )
+        return r
